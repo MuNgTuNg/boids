@@ -1,6 +1,7 @@
 #pragma once
 #include <includes.hpp>
 
+
 #include <stdio.h>
 
 #include <imgui.h>
@@ -10,4 +11,5 @@
 #include <defines.hpp>
 
 #include <window.hpp>
+#include <platform.hpp>
 

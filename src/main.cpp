@@ -23,14 +23,19 @@ int initOpenGL(){
 
 int main()
 {
+
     //creation of scene
     initOpenGL();
     shb::Window window{"Boids"};
-    shb::MonitorManager manager{};
+    glfwMakeContextCurrent(window.handle());
+    shb::MonitorManager* monitorManager = shb::MonitorManager::getInstance();
 
     //main loop
-    while (!glfwWindowShouldClose(window.handle())){   
-        glfwMakeContextCurrent(window.handle());
+    while (!glfwWindowShouldClose(window.handle())){ 
+        glClearColor(0,0,0,255);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        
         glfwSwapBuffers(window.handle());
         glfwPollEvents();
     }

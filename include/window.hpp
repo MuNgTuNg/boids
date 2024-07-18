@@ -2,6 +2,7 @@
 #include <includes.hpp>
 
 #include <string>
+#include <mutex>
 
 
 #define WIN_HEIGHT 1000
@@ -9,7 +10,9 @@
 
 namespace shb{
 
+class MonitorManager;
 class Monitor{
+  friend MonitorManager;
   public:
     Monitor(){
 
@@ -20,71 +23,109 @@ class Monitor{
     bool m_PrimaryMonitor = false;
 };
 
+
+//https://www.glfw.org/docs/3.3/group__monitor.html 
+//https://refactoring.guru/design-patterns/singleton/cpp/example
 class MonitorManager{
+
   public:
+    inline static MonitorManager* getInstance(){
+      std::lock_guard<std::mutex> lock(m_Mutex);
+      if(m_Instance == nullptr){
+        m_Instance = new MonitorManager();
+      }
+      return m_Instance;
+    }
+
+    //get primary monitor
+    //swap primary monitor
+
+  protected:
     MonitorManager(){
-        //get list of monitors.
-        int numMonitors = 0;
-        GLFWmonitor** monitorsArr = glfwGetMonitors(&numMonitors);
+      getMonitors();
+    }
+    ~MonitorManager(){}
+  
+  private:
+    void getMonitors(){ 
+      //get list of monitors.
+      int numMonitors = 0;
+      GLFWmonitor** monitorsArr = glfwGetMonitors(&numMonitors);
+      GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
 
-        for(int i = 0; i < numMonitors; ++i){
-            GLFWmonitor* currentMonitor = monitorsArr[i];
+      for(int i = 0; i < numMonitors; ++i){
 
-            const char* name = glfwGetMonitorName(currentMonitor);
-            printf("Monitor name: %s\n", name);
+        Monitor currMonitor;
+        currMonitor.m_Handle = monitorsArr[i];
+        //GLFWmonitor* currentMonitor = monitorsArr[i];
+        
+        std::string name = std::string(glfwGetMonitorName(currMonitor.m_Handle));
+        printf("Monitor name: %s\n", name.c_str());
 
-            int viewX = 0, viewY =0;
-            glfwGetMonitorPos(currentMonitor,&viewX,&viewY);
-            printf("Monitor viewport position: X:%d Y:%d\n",viewX,viewY);
+        bool isPrimaryMonitor = false;
+        currMonitor.m_Handle == primaryMonitor ? isPrimaryMonitor = true : isPrimaryMonitor = false;
+        printf("Primary Monitor: %s\n", isPrimaryMonitor ? "true" : "false");
 
-            int WAx = 0, WAy = 0, WAwidth = 0, WAheight = 0;
-            glfwGetMonitorWorkarea(currentMonitor,&WAx,&WAy,&WAwidth,&WAheight);
-            printf("Work area: X:%d Y:%d Width:%d Height:%d\n", WAx,WAy,WAwidth,WAheight);
+        int viewX = 0, viewY =0;
+        glfwGetMonitorPos(currMonitor.m_Handle,&viewX,&viewY);
+        printf("Monitor viewport position: X:%d Y:%d\n",viewX,viewY);
 
-            int widthMM = 0, heightMM = 0;
-            glfwGetMonitorPhysicalSize(currentMonitor,&widthMM,&heightMM);
-            printf("Monitor Physical Size: Width (mm):%d Height(mm):%d\n",widthMM, heightMM);
+        int WAx = 0, WAy = 0, WAwidth = 0, WAheight = 0;
+        glfwGetMonitorWorkarea(currMonitor.m_Handle,&WAx,&WAy,&WAwidth,&WAheight);
+        printf("Work area: X:%d Y:%d Width:%d Height:%d\n", WAx,WAy,WAwidth,WAheight);
 
-            float xScale = 0, yScale = 0;
-            glfwGetMonitorContentScale(currentMonitor,&xScale,&yScale);
-            printf("Content Scale: X:%f, Y:%f\n");
+        int widthMM = 0, heightMM = 0;
+        glfwGetMonitorPhysicalSize(currMonitor.m_Handle,&widthMM,&heightMM);
+        printf("Monitor Physical Size: Width (mm):%d Height(mm):%d\n",widthMM, heightMM);
 
-            const GLFWvidmode* vidmode = glfwGetVideoMode(currentMonitor);
-            printf("Current Vidmode - Width: %d, Height: %d, Red bits: %d, Green bits: %d, Blue bits: %d, Refresh rate(Hz): %d\n", vidmode->width, vidmode->height, vidmode->redBits, vidmode->greenBits, vidmode->blueBits, vidmode->refreshRate);
+        float xScale = 0, yScale = 0;
+        glfwGetMonitorContentScale(currMonitor.m_Handle,&xScale,&yScale);
+        printf("Content Scale: X:%f, Y:%f\n");
 
-            int vidmodeCount = 0;
-            const GLFWvidmode* vidmodes = glfwGetVideoModes(currentMonitor,&vidmodeCount);
-            bool printAllVidmodes = false;
+        const GLFWvidmode* vidmode = glfwGetVideoMode(currMonitor.m_Handle);
+        printf("Current Vidmode - Width: %d, Height: %d, Red bits: %d, Green bits: %d, Blue bits: %d, Refresh rate(Hz): %d\n", vidmode->width, vidmode->height, vidmode->redBits, vidmode->greenBits, vidmode->blueBits, vidmode->refreshRate);
 
-            if(printAllVidmodes){
-                for(int i = 0; i < vidmodeCount; ++i){
-                    GLFWvidmode currVidmode = vidmodes[i];
-                    printf("Vidmode %d - Width: %d, Height: %d, Red bits: %d, Green bits: %d, Blue bits: %d, Refresh rate(Hz): %d\n",i, currVidmode.width, currVidmode.height, currVidmode.redBits, currVidmode.greenBits, currVidmode.blueBits, currVidmode.refreshRate);
-                }
+        int vidmodeCount = 0;
+        const GLFWvidmode* vidmodes = glfwGetVideoModes(currMonitor.m_Handle,&vidmodeCount);
+        bool printAllVidmodes = false;
+        if(printAllVidmodes){
+            for(int i = 0; i < vidmodeCount; ++i){
+                GLFWvidmode currVidmode = vidmodes[i];
+                printf("Vidmode %d - Width: %d, Height: %d, Red bits: %d, Green bits: %d, Blue bits: %d, Refresh rate(Hz): %d\n",i, currVidmode.width, currVidmode.height, currVidmode.redBits, currVidmode.greenBits, currVidmode.blueBits, currVidmode.refreshRate);
             }
-
-            printf("\n");
-
         }
+
+        const GLFWgammaramp * gammaRamp = glfwGetGammaRamp(currMonitor.m_Handle);
+        bool printGammaRamp = false;
+        if(printGammaRamp){
+          for(int i = 0; i < gammaRamp->size; ++i){
+            printf("Gamma ramp %d: RGB{%d,%d,%d}\n", i, gammaRamp->red[i],gammaRamp->green[i],gammaRamp->blue[i]);
+          }
+        }
+
+        float gamma = 1.f;
+        glfwSetGamma(currMonitor.m_Handle,gamma);
+
+  
+        printf("\n");
+      }
 
 
     }
-
-    //get vidmodes
-    //get available vidmodes
-    //get primary monitor
-    //get position of monitors viewpoint
-    //get work area
-    //get physical size
-    //get content scale
-    //set config callback?
-    //get gamma ramp
-    //
+  
+  public:
+    MonitorManager(MonitorManager const&) = delete;
+    void operator=(MonitorManager const&) = delete;
 
   private:
-    //int m_NumMonitors = 0;
-    //GLFWmonitor** m_MonitorsArr;
+    inline static MonitorManager* m_Instance;
+    inline static std::mutex m_Mutex;
+  //static vector of all monitors
 };
+
+
+
+//MonitorManager* MonitorManager::getInstance()
 
 class Window
 {
@@ -146,5 +187,9 @@ class Window
     bool m_ContextCurrent = false;
     
 };
+
+
+
+
 
 }//namespace shb
