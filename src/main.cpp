@@ -26,10 +26,11 @@ int main()
 
     //creation of scene
     initOpenGL();
-    shb::Window window{"Boids"};
-    glfwMakeContextCurrent(window.handle());
     shb::MonitorManager* monitorManager = shb::MonitorManager::getInstance();
 
+    shb::Window window{"Boids"};
+
+ 
     //main loop
     while (!glfwWindowShouldClose(window.handle())){ 
         glClearColor(0,0,0,255);
