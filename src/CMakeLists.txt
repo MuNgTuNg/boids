@@ -1,5 +1,6 @@
 add_library(src 
     main.cpp
+    gui_monitor.cpp
 )
 
 target_include_directories( src PUBLIC 

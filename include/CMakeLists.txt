@@ -2,6 +2,9 @@ add_library(include INTERFACE
    main.hpp
    defines.hpp
    window.hpp
+   monitor.hpp
+   gui.hpp
+   includes.hpp
 )
 
 target_include_directories( include INTERFACE
