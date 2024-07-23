@@ -8,9 +8,9 @@ add_library(glad
 )
 
 target_include_directories( glad PUBLIC 
-    ${CMAKE_SOURCE_DIR}/external/glad/include
+    ${CMAKE_CURRENT_LIST_DIR}/glad/include
+    ${CMAKE_CURRENT_LIST_DIR}/glad/src
 )
-
 
 add_library(stb INTERFACE
     stb/stb_image.h
@@ -42,6 +42,6 @@ add_library(imgui
 )
 
 target_include_directories( imgui PUBLIC 
-    ${CMAKE_SOURCE_DIR}/external/imgui
-    ${CMAKE_SOURCE_DIR}/external/glfw/include
+    ${CMAKE_CURRENT_LIST_DIR}/glfw/include
+    ${CMAKE_CURRENT_LIST_DIR}/imgui
 )

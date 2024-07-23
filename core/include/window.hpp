@@ -78,6 +78,4 @@ class Window
 
 
 
-
-
 }//namespace shb

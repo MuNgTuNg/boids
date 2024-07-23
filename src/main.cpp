@@ -31,13 +31,13 @@ int main()
     stbi_set_flip_vertically_on_load(true);
 
     shb::MonitorManager* monitorManager = shb::MonitorManager::getInstance();
-
+    
     shb::Window window{"Boids"};
 
     //gui()
     shb::initGuiOpenGL3(window.handle(),"#version 330");
 
-
+    
     //main loop
     while (!glfwWindowShouldClose(window.handle())){ 
         glClearColor(0,0,0,255);
@@ -51,7 +51,7 @@ int main()
         glfwSwapBuffers(window.handle());
         glfwPollEvents();
     }
-
+    
     //destruction of scene
     glfwTerminate();
 

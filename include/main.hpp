@@ -1,5 +1,7 @@
 #pragma once
-#include <shb_core.h>
+#include <shb_core.hpp>
+
+#include <gui.hpp>
 
 #include <stdio.h>
 
