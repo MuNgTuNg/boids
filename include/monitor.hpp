@@ -1,5 +1,7 @@
 #pragma once
-#include <includes.hpp>
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #include <string>
 #include <vector>
@@ -21,7 +23,9 @@ class Vec2{
 
 
 class MonitorManager;
+
 class Monitor{
+  
   friend MonitorManager;
 
   public:
