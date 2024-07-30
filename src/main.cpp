@@ -22,32 +22,23 @@ int initOpenGL(){
 }
 
 
+void shb_main(){
 
-int main()
-{
-
-    //creation of scene
-    initOpenGL();
-    stbi_set_flip_vertically_on_load(true);
-
-    shb::MonitorManager* monitorManager = shb::MonitorManager::getInstance();
-    
     shb::Window window{"Boids"};
+   // shb::MonitorManager* monitorManager = shb::MonitorManager::getInstance();
 
     //gui()
     shb::initGuiOpenGL3(window.handle(),"#version 330");
-
     
     //main loop
     bool running = true;
-    //glfwWindowShouldClose(window.handle());
     while (running){ 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //gui.guiFrame()
-        GLFWwindow* prevWindow = window.handle();
         shb::guiFrame(&window);
    
+
         if(glfwWindowShouldClose(window.handle())){
             running = false;
         }
@@ -55,11 +46,20 @@ int main()
         glfwPollEvents();
     }
     
-    //destruction of scene
-    glfwTerminate();
 
     //~gui()
     shb::shutdownGUIOpenGL3();
+    glfwTerminate();
+}
+
+
+
+int main()
+{
+    initOpenGL();
+    stbi_set_flip_vertically_on_load(true);
+
+    shb_main();
 
     return 0;
 }

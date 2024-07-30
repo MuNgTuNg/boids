@@ -48,12 +48,10 @@ inline void shutdownGUIOpenGL3(){
 }
 
 
-void windowControls(shb::Window* window);
-
-
 
 inline bool recreateWindow = false;
 inline bool isDecorated = false;
+void windowControls(shb::Window* window);
 
 //values passed into this need to become members
 inline void guiFrame(shb::Window* window){ 
@@ -66,7 +64,6 @@ inline void guiFrame(shb::Window* window){
 
     printMonitorDetailsGUI();
 
-    GLFWwindow* prevWindow = window->handle();
     windowControls(window);
 
     //ImGui::ShowDemoWindow();

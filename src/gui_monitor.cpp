@@ -25,18 +25,27 @@ void printMonitorDetailsGUI(){
 void windowControls(shb::Window* window){
     assert(window != nullptr && "Passed null window to gui windowControls\n");
     if (ImGui::CollapsingHeader("Window")){
+        ImGui::Text("Width: %d\nHeight: %d", window->width(), window->height());
 
-        if(ImGui::Button("Reload Window")){
-           recreateWindow = true;
+
+        bool isResizablePrev = window->isResizable;
+        ImGui::Checkbox("Resizable?",&window->isResizable);
+        if(isResizablePrev != window->isResizable){
+            glfwSetWindowAttrib(window->handle(), GLFW_RESIZABLE, window->isResizable);
         }
 
-        
         bool isDecoratedPrev = window->isDecorated;
         ImGui::Checkbox("Decorate Window?",&window->isDecorated);
         if(isDecoratedPrev != window->isDecorated){
            glfwWindowHint(GLFW_DECORATED, window->isDecorated);
            recreateWindow = true;
         }
+        
+        //set to be recreated at end of gui frame
+        if(ImGui::Button("Reload Window")){
+           recreateWindow = true;
+        }
+        
     }
 }
 }//namespace shb
