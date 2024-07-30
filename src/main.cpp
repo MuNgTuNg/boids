@@ -39,15 +39,18 @@ int main()
 
     
     //main loop
-    while (!glfwWindowShouldClose(window.handle())){ 
-        glClearColor(0,0,0,255);
+    bool running = true;
+    //glfwWindowShouldClose(window.handle());
+    while (running){ 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //gui.guiFrame()
-        shb::guiFrame();
-
-
-        
+        GLFWwindow* prevWindow = window.handle();
+        shb::guiFrame(&window);
+   
+        if(glfwWindowShouldClose(window.handle())){
+            running = false;
+        }
         glfwSwapBuffers(window.handle());
         glfwPollEvents();
     }
