@@ -45,7 +45,10 @@ void Window::recreateWindow(){
 
 
 void Window::setDefaultWindowDetails(){
-    glViewport( 0, 0, m_Width, m_Height);
+
+    glfwGetFramebufferSize(m_Handle, &m_FrameBufferWidth, &m_FrameBufferHeight);
+    glViewport( 0, 0, m_FrameBufferWidth, m_FrameBufferHeight); 
+
     glClearColor(0,0,0,255);
     //glEnable              ( GL_DEBUG_OUTPUT );
     //glDebugMessageCallback( MessageCallback, 0 );
@@ -76,13 +79,12 @@ void Window::setDefaultWindowHints(){
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, 1);
-    //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 }
 
 
 void Window::populateWindowInfoAttributes(){ //https://www.glfw.org/docs/3.3/window_guide.html#window_attribs
-    isDecorated = glfwGetWindowAttrib(m_Handle, GLFW_DECORATED);
-    isResizable = glfwGetWindowAttrib(m_Handle, GLFW_RESIZABLE);
+    m_IsDecorated = glfwGetWindowAttrib(m_Handle, GLFW_DECORATED);
+    m_IsResizable = glfwGetWindowAttrib(m_Handle, GLFW_RESIZABLE);
 }
 
 

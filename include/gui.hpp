@@ -50,8 +50,7 @@ inline void shutdownGUIOpenGL3(){
 
 
 inline bool recreateWindow = false;
-inline bool isDecorated = false;
-void windowControls(shb::Window* window);
+void windowControlsGUI(shb::Window* window);
 
 //values passed into this need to become members
 inline void guiFrame(shb::Window* window){ 
@@ -64,13 +63,14 @@ inline void guiFrame(shb::Window* window){
 
     printMonitorDetailsGUI();
 
-    windowControls(window);
+    windowControlsGUI(window);
 
     //ImGui::ShowDemoWindow();
     ImGui::End();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+    //need to recreate imgui context for new window
     if(recreateWindow == true){
         window->recreateWindow();
         shutdownGUIOpenGL3();

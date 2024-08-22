@@ -1,6 +1,7 @@
 add_library(src 
     main.cpp
     gui_monitor.cpp
+    gui_window.cpp
 )
 
 

@@ -14,6 +14,7 @@ target_include_directories(shb_core PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/external/glad/include
     ${CMAKE_CURRENT_LIST_DIR}/external/glad/include/glad
     ${CMAKE_CURRENT_LIST_DIR}/external/imgui
+    ${CMAKE_CURRENT_LIST_DIR}/external/glm
     ${CMAKE_CURRENT_LIST_DIR}/external/glfw/include
     ${CMAKE_CURRENT_LIST_DIR}/external/stb
     ${CMAKE_CURRENT_LIST_DIR}/include
